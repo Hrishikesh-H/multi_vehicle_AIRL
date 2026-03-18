@@ -5,7 +5,7 @@
 # @type Quadrotor
 #
 
-PX4_SIM_MODEL=${PX4_SIM_MODEL:=x500_lidar_depth}
+PX4_SIM_MODEL=${PX4_SIM_MODEL:=x500_lidar_depth_e}
 
 . ${R}etc/init.d-posix/airframes/4001_gz_x500
 

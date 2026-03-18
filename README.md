@@ -151,14 +151,20 @@ cp -r PX4-directories/'ROMFS scripts'/* ~/PX4-Autopilot/ROMFS/px4fmu_common/init
 
 ```bash
 cd ~/PX4-Autopilot
-make px4_sitl gz_x500_lidar_depth
+make px4_sitl gz_x500_lidar_depth_f #friendly
+```
+And
+
+```bash
+cd ~/PX4-Autopilot
+make px4_sitl gz_x500_lidar_depth_e #enemy
 ```
 
 If it fails:
 
 ```bash
 rm -rf build
-make px4_sitl gz_x500_lidar_depth
+make px4_sitl gz_x500_lidar_depth_e
 ```
 
 ---
@@ -199,9 +205,17 @@ Copy the package provided in this repository (`Custom_ROS/*`) into:
 ```bash
 cp -r Custom_ROS/* ~/ros2_ws/src/
 
----
+```
 
 ## 3.5 Build Workspace
+
+### IMP : Convert all the nodes inside the custom packages to executables using 
+
+```bash
+chmod +x {code.py}
+```
+
+The above step must be completed before building
 
 ```bash
 cd ~/ros2_ws

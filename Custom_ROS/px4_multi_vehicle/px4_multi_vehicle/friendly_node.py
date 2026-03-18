@@ -33,21 +33,21 @@ class FriendlyDroneNode(Node):
         # Sensor subscriptions (ADDED)
         self.camera_sub = self.create_subscription(
             Image,
-            "/world/default/model/x500_lidar_depth_1/link/camera_link/sensor/IMX214/image",
+            "/world/default/model/x500_lidar_depth_f_1/link/camera_link/sensor/IMX214/image",
             self.camera_callback,
             10
         )
 
         self.lidar_front_sub = self.create_subscription(
             LaserScan,
-            "/world/default/model/x500_lidar_depth_1/link/lidar_front_sensor_link/sensor/lidar_front/scan",
+            "/world/default/model/x500_lidar_depth_f_1/link/lidar_front_sensor_link/sensor/lidar_front/scan",
             self.lidar_front_callback,
             10
         )
 
         self.lidar_down_sub = self.create_subscription(
             LaserScan,
-            "/world/default/model/x500_lidar_depth_1/link/lidar_down_sensor_link/sensor/lidar_down/scan",
+            "/world/default/model/x500_lidar_depth_f_1/link/lidar_down_sensor_link/sensor/lidar_down/scan",
             self.lidar_down_callback,
             10
         )
