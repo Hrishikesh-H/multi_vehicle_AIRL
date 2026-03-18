@@ -390,7 +390,7 @@ Enter the above command in the terminal to verify whether the topics are being p
 /world/default/model/x500_lidar_depth_f_1/link/camera_link/sensor/IMX214/image
 /world/default/model/x500_lidar_depth_f_1/link/lidar_down_sensor_link/sensor/lidar_down/scan
 /world/default/model/x500_lidar_depth_f_1/link/lidar_front_sensor_link/sensor/lidar_front/scan
-```'
+```
 
 
 
