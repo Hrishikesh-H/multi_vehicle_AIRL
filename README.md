@@ -1,4 +1,3 @@
-````markdown id="8v0m6x"
 # Environment Setup
 
 This section provides the core setup pipeline for:
@@ -29,7 +28,6 @@ Place the following file in this directory:
 chmod +x scripts/setup-xrce.sh
 ```
 
----
 
 ## 3. Install PX4 Autopilot
 
@@ -243,5 +241,6 @@ ros2 launch px4_multi_vehicle px4_multi_sim.launch.py
 ## Demo
 
 The simulation must look like this
+<img width="1918" height="1056" alt="image" src="https://github.com/user-attachments/assets/f809713b-acfa-4079-a0f5-15c22c1e2a74" />
 
 
