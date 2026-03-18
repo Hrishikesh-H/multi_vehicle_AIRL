@@ -1,47 +1,48 @@
-# ⚙️ Environment Setup
+````markdown id="8v0m6x"
+# Environment Setup
 
-This section provides the **core setup pipeline** for:
+This section provides the core setup pipeline for:
 - PX4 Autopilot (SITL)
 - ROS 2 Humble
 - Micro XRCE-DDS Agent (PX4 ↔ ROS2 bridge)
 
 ---
 
-## 📁 Step 1 — Create Setup Directory
+## 1. Setup Directory
 
-Create a dedicated folder:
+Create a dedicated workspace for setup scripts:
 
 ```bash
-mkdir -p ~/px4_ros2_setup
+mkdir -p ~/px4_ros2_setup/scripts
 cd ~/px4_ros2_setup
 ````
 
 Place the following file in this directory:
 
-* `3-setup-xrce.sh`
+* `scripts/setup-xrce.sh`
 
 ---
 
-## ▶️ Step 2 — Make Script Executable
+## 2. Make Script Executable
 
 ```bash
-chmod +x 3-setup-xrce.sh
+chmod +x scripts/setup-xrce.sh
 ```
 
 ---
 
-## 🚀 Step 3 — Install PX4 Autopilot (Official Method)
+## 3. Install PX4 Autopilot
 
-Install PX4 using the official documentation:
+Follow the official PX4 documentation:
 
-👉 [https://docs.px4.io/main/en/dev_setup/dev_env_linux_ubuntu.html](https://docs.px4.io/main/en/dev_setup/dev_env_linux_ubuntu.html)
+[https://docs.px4.io/main/en/dev_setup/dev_env_linux_ubuntu.html](https://docs.px4.io/main/en/dev_setup/dev_env_linux_ubuntu.html)
 
 **Requirements:**
 
 * Ubuntu 22.04
-* Follow the **Gazebo + SITL** setup instructions
+* Complete Gazebo + SITL setup
 
-After installation, verify:
+**Verification:**
 
 ```bash
 cd ~/PX4-Autopilot
@@ -50,18 +51,18 @@ make px4_sitl
 
 ---
 
-## 🚀 Step 4 — Install ROS 2 Humble (Official Method)
+## 4. Install ROS 2 Humble
 
-Install ROS 2 Humble using the official guide:
+Follow the official ROS 2 documentation:
 
-👉 [https://docs.ros.org/en/humble/Installation.html](https://docs.ros.org/en/humble/Installation.html)
+[https://docs.ros.org/en/humble/Installation.html](https://docs.ros.org/en/humble/Installation.html)
 
 **Requirements:**
 
 * Ubuntu 22.04
-* Follow the *Desktop Install* instructions
+* Desktop installation
 
-After installation, verify:
+**Verification:**
 
 ```bash
 source /opt/ros/humble/setup.bash
@@ -70,22 +71,22 @@ ros2 topic list
 
 ---
 
-## 🚀 Step 5 — Micro XRCE-DDS Agent Setup
+## 5. Micro XRCE-DDS Agent Setup
 
 Run the setup script:
 
 ```bash
-./3-setup-xrce.sh
+./scripts/setup-xrce.sh
 ```
 
-**What it does:**
+**Functionality:**
 
 * Clones and builds Micro XRCE-DDS Agent
 * Installs DDS bridge for PX4–ROS2 communication
 
 ---
 
-## ✅ Verification
+## 6. Verification
 
 ### XRCE Agent
 
@@ -95,42 +96,138 @@ MicroXRCEAgent udp4 -p 8888
 
 ---
 
-## 📌 Notes
+## Notes
 
-* Recommended OS: **Ubuntu 22.04**
-* Ensure ROS 2 is sourced before running ROS-related commands:
+* Recommended OS: Ubuntu 22.04
+* Always source ROS 2 before running ROS-based commands:
 
   ```bash
   source /opt/ros/humble/setup.bash
   ```
-* Reboot after installation to avoid environment issues
+* A system reboot after installation is recommended
 
 ---
 
-## 🔧 What This Setup Enables
+## System Capability After Setup
 
-This setup provides:
+This setup enables:
 
-* PX4 SITL simulation environment
+* PX4 SITL simulation
 * ROS 2 middleware integration
-* DDS bridge for real-time communication
+* DDS-based PX4–ROS communication
 
-This is required for:
+Applications:
 
 * Offboard control
 * Multi-vehicle simulation
 * Sensor integration
-* Custom autonomy algorithms
+* Custom autonomy pipelines
 
 ---
 
-## ➡️ Next Steps
+# 2. PX4 Custom Model Setup
 
-Proceed with:
+Below are the files and folders to be placed inside `~/PX4-Autopilot` to enable the custom drone.
 
-* ROS 2 workspace setup (`colcon`)
-* PX4–ROS2 interface configuration
-* Multi-vehicle simulation setup
+### Steps
 
+1. Copy model files:
+
+```bash
+cp -r PX4-directories/models/* ~/PX4-Autopilot/Tools/simulation/gz/models/
 ```
+
+2. Copy ROMFS airframe scripts:
+
+```bash
+cp -r PX4-directories/'ROMFS scripts'/* ~/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/airframes/
 ```
+
+3. Replace the `CMakeLists.txt` in the destination directory with the provided one.
+
+---
+
+### Build and Test
+
+```bash
+cd ~/PX4-Autopilot
+make px4_sitl gz_x500_lidar_depth
+```
+
+If it fails:
+
+```bash
+rm -rf build
+make px4_sitl gz_x500_lidar_depth
+```
+
+---
+
+# 3. ROS 2 Workspace Setup
+
+## 3.1 Install ROS-Gazebo Harmonic Bridge
+
+```bash
+sudo apt update
+sudo apt install ros-humble-ros-gzharmonic
+```
+
+---
+
+## 3.2 Create Workspace
+
+```bash
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws
+```
+
+---
+
+## 3.3 Clone Required Package
+
+```bash
+cd ~/ros2_ws/src
+git clone https://github.com/PX4/px4_msgs.git
+```
+
+---
+
+## 3.4 Add Custom Package
+
+Copy the package provided in this repository (`Custom_ROS/*`) into:
+
+```bash
+cp -r Custom_ROS/* ~/ros2_ws/src/
+
+---
+
+## 3.5 Build Workspace
+
+```bash
+cd ~/ros2_ws
+colcon build --symlink-install
+```
+
+---
+
+## 3.6 Source Workspace
+
+```bash
+source install/setup.bash
+```
+
+---
+
+## 3.7 Launch
+
+```bash
+ros2 launch px4_multi_vehicle px4_multi_sim.launch.py
+```
+
+---
+
+## Demo
+
+The simulation must look like this
+
+
